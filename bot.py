@@ -7,6 +7,8 @@ from telegram.ext.dispatcher import run_async
 import os
 import sys
 from upload import upload
+from display_progress import display_progress
+from help_uploadbot import help_uploadbot
 from creds import Creds
 from pySmartDL import SmartDL
 from pydrive.auth import GoogleAuth
