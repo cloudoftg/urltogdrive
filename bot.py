@@ -211,7 +211,7 @@ def UPLOAD(update, context):
             if DownloadStatus:
                 sent_message.edit_text(TEXT.UPLOADING)
 
-                SIZE = (os.path.getsize(filename))/1048576
+                SIZE = (os.path.getsize(filename))/3145728
                 SIZE = round(SIZE)
                 FILENAME = filename.split("/")[-1]
                 try:
