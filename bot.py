@@ -124,7 +124,7 @@ def UPLOAD(update, context):
     message,
     start
 ):
-    now = time.time()
+        now = time.time()
     diff = now - start
     if round(diff % 10.00) == 0 or current == total:
         # if round(current / total * 100, 0) % 5 == 0:
