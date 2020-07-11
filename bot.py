@@ -280,6 +280,7 @@ def UPLOAD(update, context):
             if DownloadStatus:
                 sent_message.edit_text(TEXT.UPLOADING)
             try:
+                
                 await message.edit(
                     text="{}\n {}".format(
                         ud_type,
