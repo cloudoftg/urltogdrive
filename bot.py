@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import requests
+import tqdm
 import json
 from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
 from telegram import ParseMode
@@ -174,6 +176,12 @@ def UPLOAD(update, context):
                 print("Downloading Complete : {}".format(filename))
                 sent_message.edit_text(TEXT.DOWN_COMPLETE)
                 DownloadStatus = True
+                chunk_size = 1024
+                r = request.get(url, stream = True )
+                total_size = int(r.headers['content-length'])
+                with open(file_name, 'wb') as fd:
+                    for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB'):
+                        f.write(data)
 
             except Exception as e:
                 # switch To second download(SmartDl Downloader) `You can activate it throungh TEXT file`
