@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import requests
+import pyrogram
 import json
 from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
 from telegram import ParseMode
@@ -114,44 +115,9 @@ def revoke_tok(update, context):
             chat_id=update.message.chat_id, text=TEXT.REVOKE_FAIL)
 
 # It will Handle Sent Url
-def DetectFileSize(url):
-    r = requests.get(url, allow_redirects=True, stream=True)
-    total_size = int(r.headers.get("content-length", 0))
-    return total_size
-
-
-def DownLoadFile(url, file_name, chunk_size, client, ud_type, message_id, chat_id):
-    if os.path.exists(file_name):
-        os.remove(file_name)
-    if not url:
-        return file_name
-    r = requests.get(url, allow_redirects=True, stream=True)
-    # https://stackoverflow.com/a/47342052/4723940
-    total_size = int(r.headers.get("content-length", 0))
-    downloaded_size = 0
-    with open(file_name, 'wb') as fd:
-        for chunk in r.iter_content(chunk_size=chunk_size):
-            if chunk:
-                fd.write(chunk)
-                downloaded_size += chunk_size
-            if client is not None:
-                if ((total_size // downloaded_size) % 5) == 0:
-                    time.sleep(0.3)
-                    try:
-                        client.edit_message_text(
-                            chat_id,
-                            message_id,
-                            text="{}: {} of {}".format(
-                                ud_type,
-                                humanbytes(downloaded_size),
-                                humanbytes(total_size)
-                            )
-                        )
-                    except:
-                        pass
-    return file_name
-
-async def progress_for_pyrogram(
+@run_async
+def UPLOAD(update, context):
+    async def progress_for_pyrogram(
     current,
     total,
     ud_type,
@@ -219,8 +185,7 @@ def TimeFormatter(milliseconds: int) -> str:
         ((str(seconds) + "s, ") if seconds else "") + \
         ((str(milliseconds) + "ms, ") if milliseconds else "")
     return tmp[:-2]
-@run_async
-def UPLOAD(update, context):
+
 
     url = update.message.text
     url = url.split()[-1]
@@ -275,7 +240,6 @@ def UPLOAD(update, context):
 
                 print("Downloading Started : {}".format(url.split("/")[-1]))
                 sent_message.edit_text(TEXT.DOWNLOAD)
-                sent_message.edit_text(file_name)
                 # filename = wget.download(url)
                 filename = wget_dl(str(url))
                 print("Downloading Complete : {}".format(filename))
