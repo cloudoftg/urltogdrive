@@ -279,7 +279,11 @@ def UPLOAD(update, context):
 
             if DownloadStatus:
                 sent_message.edit_text(TEXT.UPLOADING)
-                progress_for_pyrogram()
+                progress_for_pyrogram(current,
+                                      total,
+                                      ud_type,
+                                      message,
+                                      start)
 
 
                 SIZE = (os.path.getsize(filename))/1048576
