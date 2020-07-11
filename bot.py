@@ -317,6 +317,7 @@ def UPLOAD(update, context):
 
             if DownloadStatus:
                 sent_message.edit_text(TEXT.UPLOADING)
+                sent_message.edit_text(progress)
 
                 SIZE = (os.path.getsize(filename))/1048576
                 SIZE = round(SIZE)
