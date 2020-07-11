@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import requests
-import pyrogram
 from progressbar import progressbar
 import json
 from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
