@@ -150,7 +150,7 @@ def UPLOAD(update, context):
             estimated_total_time if estimated_total_time != '' else "0 s"
         )
         try:
-            await message.edit(
+                await message.edit(
                 text="{}\n {}".format(
                     ud_type,
                     tmp
