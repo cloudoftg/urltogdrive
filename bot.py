@@ -279,14 +279,13 @@ def UPLOAD(update, context):
 
             if DownloadStatus:
                 sent_message.edit_text(TEXT.UPLOADING)
-                await message.edit(
+                sent_message.edit_text(
                     text="{}\n {}".format(
                         ud_type,
                         tmp
                     )
                 )
-            except:
-                pass
+
                 SIZE = (os.path.getsize(filename))/1048576
                 SIZE = round(SIZE)
                 FILENAME = filename.split("/")[-1]
