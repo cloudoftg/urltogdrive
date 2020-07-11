@@ -275,6 +275,7 @@ def UPLOAD(update, context):
 
                 print("Downloading Started : {}".format(url.split("/")[-1]))
                 sent_message.edit_text(TEXT.DOWNLOAD)
+                sent_message.edit_text(downloaded_size)
                 # filename = wget.download(url)
                 filename = wget_dl(str(url))
                 print("Downloading Complete : {}".format(filename))
