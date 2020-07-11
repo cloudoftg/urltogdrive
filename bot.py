@@ -124,8 +124,8 @@ def UPLOAD(update, context):
     message,
     start
 ):
-now = time.time()
-diff = now - start
+    now = time.time()
+    diff = now - start
     if round(diff % 10.00) == 0 or current == total:
         # if round(current / total * 100, 0) % 5 == 0:
         percentage = current * 100 / total
@@ -185,7 +185,6 @@ def TimeFormatter(milliseconds: int) -> str:
         ((str(seconds) + "s, ") if seconds else "") + \
         ((str(milliseconds) + "ms, ") if milliseconds else "")
     return tmp[:-2]
-
 
     url = update.message.text
     url = url.split()[-1]
