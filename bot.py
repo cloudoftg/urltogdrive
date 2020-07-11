@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import requests
-from progressbar import progressbar
+import progressbar
 import json
 from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
 from telegram import ParseMode
