@@ -114,6 +114,43 @@ def revoke_tok(update, context):
             chat_id=update.message.chat_id, text=TEXT.REVOKE_FAIL)
 
 # It will Handle Sent Url
+def DetectFileSize(url):
+    r = requests.get(url, allow_redirects=True, stream=True)
+    total_size = int(r.headers.get("content-length", 0))
+    return total_size
+
+
+def DownLoadFile(url, file_name, chunk_size, client, ud_type, message_id, chat_id):
+    if os.path.exists(file_name):
+        os.remove(file_name)
+    if not url:
+        return file_name
+    r = requests.get(url, allow_redirects=True, stream=True)
+    # https://stackoverflow.com/a/47342052/4723940
+    total_size = int(r.headers.get("content-length", 0))
+    downloaded_size = 0
+    with open(file_name, 'wb') as fd:
+        for chunk in r.iter_content(chunk_size=chunk_size):
+            if chunk:
+                fd.write(chunk)
+                downloaded_size += chunk_size
+            if client is not None:
+                if ((total_size // downloaded_size) % 5) == 0:
+                    time.sleep(0.3)
+                    try:
+                        client.edit_message_text(
+                            chat_id,
+                            message_id,
+                            text="{}: {} of {}".format(
+                                ud_type,
+                                humanbytes(downloaded_size),
+                                humanbytes(total_size)
+                            )
+                        )
+                    except:
+                        pass
+    return file_name
+
 async def progress_for_pyrogram(
     current,
     total,
@@ -243,12 +280,7 @@ def UPLOAD(update, context):
                 print("Downloading Complete : {}".format(filename))
                 sent_message.edit_text(TEXT.DOWN_COMPLETE)
                 DownloadStatus = True
-                chunk_size = 1024
-                r = requests.get(url, stream = True )
-                total_size = int(r.headers['content-length'])
-                with open(filename, 'wb') as fd:
-                    for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB'):
-                        f.write(data)
+              
 
             except Exception as e:
                 # switch To second download(SmartDl Downloader) `You can activate it throungh TEXT file`
@@ -288,6 +320,7 @@ def UPLOAD(update, context):
                 SIZE = (os.path.getsize(filename))/1048576
                 SIZE = round(SIZE)
                 FILENAME = filename.split("/")[-1]
+                
                 try:
                     FILELINK = upload(filename, update,
                                       context, TEXT.drive_folder_name)
