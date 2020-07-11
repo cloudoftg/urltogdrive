@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import requests
-pip install tqdm
+pip3 install tqdm
 from tqdm import tqdm
 import json
 from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
