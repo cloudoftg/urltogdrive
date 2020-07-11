@@ -183,7 +183,7 @@ def TimeFormatter(milliseconds: int) -> str:
         ((str(milliseconds) + "ms, ") if milliseconds else "")
     return tmp[:-2]
     
-print.edit_text(progress_for_pyrogram)
+print(progress_for_pyrogram)
 
 @run_async
 def UPLOAD(update, context):
