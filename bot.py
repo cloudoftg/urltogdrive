@@ -114,7 +114,7 @@ def revoke_tok(update, context):
             chat_id=update.message.chat_id, text=TEXT.REVOKE_FAIL)
 
 # It will Handle Sent Url
-class Main
+class Main:
     async def progress_for_pyrogram(
         current,
         total,
