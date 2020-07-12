@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from tqdm import tqdm
 import json
 from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
 from telegram import ParseMode
@@ -115,111 +115,6 @@ def revoke_tok(update, context):
 
 # It will Handle Sent Url
 @run_async
-def DetectFileSize(url):
-    r = requests.get(url, allow_redirects=True, stream=True)
-    total_size = int(r.headers.get("content-length", 0))
-    return total_size
-
-
-def DownLoadFile(url, file_name, chunk_size, client, ud_type, message_id, chat_id):
-    if os.path.exists(file_name):
-        os.remove(file_name)
-    if not url:
-        return file_name
-    r = requests.get(url, allow_redirects=True, stream=True)
-    # https://stackoverflow.com/a/47342052/4723940
-    total_size = int(r.headers.get("content-length", 0))
-    downloaded_size = 0
-    with open(file_name, 'wb') as fd:
-        for chunk in r.iter_content(chunk_size=chunk_size):
-            if chunk:
-                fd.write(chunk)
-                downloaded_size += chunk_size
-            if client is not None:
-                if ((total_size // downloaded_size) % 5) == 0:
-                    time.sleep(0.3)
-                    try:
-                        client.edit_message_text(
-                            chat_id,
-                            message_id,
-                            text="{}: {} of {}".format(
-                                ud_type,
-                                humanbytes(downloaded_size),
-                                humanbytes(total_size)
-                            )
-                        )
-                    except:
-                        pass
-    return file_name
-async def progress_for_pyrogram(
-    current,
-    total,
-    ud_type,
-    message,
-    start
-):
-    now = time.time()
-    diff = now - start
-    if round(diff % 10.00) == 0 or current == total:
-        # if round(current / total * 100, 0) % 5 == 0:
-        percentage = current * 100 / total
-        speed = current / diff
-        elapsed_time = round(diff) * 1000
-        time_to_completion = round((total - current) / speed) * 1000
-        estimated_total_time = elapsed_time + time_to_completion
-
-        elapsed_time = TimeFormatter(milliseconds=elapsed_time)
-        estimated_total_time = TimeFormatter(milliseconds=estimated_total_time)
-
-        progress = "[{0}{1}] \nP: {2}%\n".format(
-            ''.join(["█" for i in range(math.floor(percentage / 5))]),
-            ''.join(["░" for i in range(20 - math.floor(percentage / 5))]),
-            round(percentage, 2))
-
-        tmp = progress + "{0} of {1}\nSpeed: {2}/s\nETA: {3}\n".format(
-            humanbytes(current),
-            humanbytes(total),
-            humanbytes(speed),
-            # elapsed_time if elapsed_time != '' else "0 s",
-            estimated_total_time if estimated_total_time != '' else "0 s"
-        )
-        try:
-            await message.edit(
-                text="{}\n {}".format(
-                    ud_type,
-                    tmp
-                )
-            )
-        except:
-            pass
-
-
-def humanbytes(size):
-    # https://stackoverflow.com/a/49361727/4723940
-    # 2**10 = 1024
-    if not size:
-        return ""
-    power = 2**10
-    n = 0
-    Dic_powerN = {0: ' ', 1: 'Ki', 2: 'Mi', 3: 'Gi', 4: 'Ti'}
-    while size > power:
-        size /= power
-        n += 1
-    return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
-
-
-def TimeFormatter(milliseconds: int) -> str:
-    seconds, milliseconds = divmod(int(milliseconds), 1000)
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-    tmp = ((str(days) + "d, ") if days else "") + \
-        ((str(hours) + "h, ") if hours else "") + \
-        ((str(minutes) + "m, ") if minutes else "") + \
-        ((str(seconds) + "s, ") if seconds else "") + \
-        ((str(milliseconds) + "ms, ") if milliseconds else "")
-    return tmp[:-2]
-
 def UPLOAD(update, context):
 
     url = update.message.text
@@ -270,6 +165,14 @@ def UPLOAD(update, context):
                 sent_message.edit_text("Mega Downloading Error !!")
 
         else:
+            try:
+                chunk_size = 1024
+                r = requests.get(url, stream = True)
+                total_size = int(r.headers['content-length'])
+                with open(file_name, 'wb') as f:
+                    for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB')
+                    sent_message.edit_text(data)
+                    
             try:
                 filename = url.split("/")[-1]
 
