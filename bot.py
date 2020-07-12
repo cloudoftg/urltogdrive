@@ -118,11 +118,12 @@ def revoke_tok(update, context):
 @run_async
 def UPLOAD(update, context):
     chunk_size = 1024
+    progress = 0
     r = requests.get(url, stream = True)
     total_size = int(r.headers['content-length'])
     with open(file_name, 'wb') as f:
         for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB'):
-        progress = data
+        progress == data
 
 
     url = update.message.text
