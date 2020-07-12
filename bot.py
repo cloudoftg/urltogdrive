@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from tqdm import tqdm
+import requests
+import tqdm
 import json
 from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
 from telegram import ParseMode
