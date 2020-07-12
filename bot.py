@@ -114,6 +114,7 @@ def revoke_tok(update, context):
             chat_id=update.message.chat_id, text=TEXT.REVOKE_FAIL)
 
 # It will Handle Sent Url
+@run_async
 async def progress_for_pyrogram(
     current,
     total,
@@ -183,7 +184,7 @@ def TimeFormatter(milliseconds: int) -> str:
         ((str(milliseconds) + "ms, ") if milliseconds else "")
     return tmp[:-2]
 
-@run_async
+
 def UPLOAD(update, context):
 
     url = update.message.text
