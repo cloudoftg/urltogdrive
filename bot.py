@@ -173,7 +173,6 @@ def UPLOAD(update, context):
                 with open(file_name, 'wb') as f:
                     for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB'):
                         sent_message.edit_text(data)
-                    
             try:
                 filename = url.split("/")[-1]
 
