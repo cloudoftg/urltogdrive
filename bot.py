@@ -117,14 +117,7 @@ def revoke_tok(update, context):
 # It will Handle Sent Url
 @run_async
 def UPLOAD(update, context):
-    chunk_size = 1024
-    filename = wget_dl(str(url))
-    r = requests.get(url, stream = True)
-    total_size = int(r.headers['content-length'])
-    with open(filename, 'wb') as f:
-        for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB'):
-            progress == data
-
+    
 
     url = update.message.text
     url = url.split()[-1]
@@ -134,6 +127,14 @@ def UPLOAD(update, context):
     ID = update.message.chat_id
     ID = str(ID)
     os.path.isfile(ID)
+    chunk_size = 1024
+    filename = wget_dl(str(url))
+    r = requests.get(url, stream = True)
+    total_size = int(r.headers['content-length'])
+    with open(filename, 'wb') as f:
+        for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB'):
+            progress == data
+
     if os.path.isfile(ID):
         # Openlaod Stuffs
 
