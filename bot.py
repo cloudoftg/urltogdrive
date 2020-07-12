@@ -118,6 +118,7 @@ def revoke_tok(update, context):
 @run_async
 def UPLOAD(update, context):
     chunk_size = 1024
+    filename = wget_dl(str(url))
     r = requests.get(url, stream = True)
     total_size = int(r.headers['content-length'])
     with open(filename, 'wb') as f:
