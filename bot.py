@@ -116,6 +116,13 @@ def revoke_tok(update, context):
 
 # It will Handle Sent Url
 @run_async
+chunk_size = 1024
+r = requests.get(url, stream = True)
+total_size = int(r.headers['content-length'])
+with open(file_name, 'wb') as f:
+    for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB')
+    progress = data
+@run_async
 def UPLOAD(update, context):
 
     url = update.message.text
@@ -167,17 +174,11 @@ def UPLOAD(update, context):
 
         else:
             try:
-                chunk_size = 1024
-                r = requests.get(url, stream = True)
-                total_size = int(r.headers['content-length'])
-                with open(file_name, 'wb') as f:
-                    for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB'):
-                        sent_message.edit_text(data)
-            try:
                 filename = url.split("/")[-1]
 
                 print("Downloading Started : {}".format(url.split("/")[-1]))
                 sent_message.edit_text(TEXT.DOWNLOAD)
+                sent_message.edit_text(progress)
                 # filename = wget.download(url)
                 filename = wget_dl(str(url))
                 print("Downloading Complete : {}".format(filename))
