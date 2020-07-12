@@ -120,7 +120,7 @@ def UPLOAD(update, context):
     chunk_size = 1024
     r = requests.get(url, stream = True)
     total_size = int(r.headers['content-length'])
-    with open(file_name, 'wb') as f:
+    with open(filename, 'wb') as f:
         for data in tqdm(iterable = r.iter_content(chunk_size = chunk_size), total = total_size/chunk_size, unit = 'KB'):
             progress == data
 
